@@ -3,7 +3,7 @@ const config = {
   width:600,
   height:900,
   physics:{
-    deafult:'aracde',
+    default:'arcade',
     arcade:{
       gravity: {y:0},
       debug: false
