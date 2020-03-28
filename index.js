@@ -20,11 +20,11 @@ const config = {
 const game = new Phaser.Game(config);
 
 function preload(){
-
+    this.load.image('spike', 'assets/spike.png');
 }
 
 function create(){
-
+    this.add.image(300, 450, 'spike');
 }
 
 function update(){
