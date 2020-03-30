@@ -19,7 +19,8 @@ const config = {
 
 const game = new Phaser.Game(config);
 
-let character;
+let phaser_character;
+let player;
 let cursors;
 
 
@@ -42,11 +43,10 @@ function create(){
     powerups.create(100, 200, 'timer_powerup');
     powerups.create(100, 300, 'shield_powerup');
 
-    character = this.physics.add.sprite(300, 875, 'player');
+    phaser_character = this.physics.add.sprite(300, 875, 'player');
+    phaser_character.setCollideWorldBounds(true);
 
     cursors = this.input.keyboard.createCursorKeys();
-
-    character.setCollideWorldBounds(true);
 
     this.anims.create({
       key: 'left', 
@@ -64,26 +64,15 @@ function create(){
       frames:[{key: 'player', frame:2}],
     });
 
-    
+    player = new Player(phaser_character, [2, 3], 300);
 }
 
 function update(){
-  if(cursors.left.isDown)
+  if ((cursors.left.isDown != player.arrow_keys.left) || (cursors.right.isDown != player.arrow_keys.right))
   {
-    character.setVelocityX(-300);
+    player.arrow_keys.left = cursors.left.isDown;
+    player.arrow_keys.right = cursors.right.isDown;
 
-    character.anims.play('left', true);
+    player.update_velocity();
   }
-  else if(cursors.right.isDown)
-  {
-    character.setVelocityX(300);
-    character.anims.play('right', true);
-  }
-  else
-  {
-    character.setVelocityX(0);
-    character.anims.play('center');
-  }
-
-  character.setVelocityY(-60);
 }
