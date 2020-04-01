@@ -23,6 +23,10 @@ let phaser_character;
 let player;
 let cursors;
 
+// Stop-gap measure to set initial run properties e.g. velocity - This cannot be done in create() for some reason
+let start = false;
+let started = false;
+
 
 function preload(){
     this.load.image('spike', 'assets/spike.png');
@@ -68,11 +72,30 @@ function create(){
 }
 
 function update(){
+  if (start && !started)
+  {
+    player.phaser_object.setVelocityY(-150);
+
+    started = true;
+  }
+
   if ((cursors.left.isDown != player.arrow_keys.left) || (cursors.right.isDown != player.arrow_keys.right))
   {
+    if (!start) {start = true}
+
     player.arrow_keys.left = cursors.left.isDown;
     player.arrow_keys.right = cursors.right.isDown;
 
     player.update_velocity();
   }
+
+  update_camera(this.cameras.main, player);
+}
+
+function update_camera(camera, player) {
+  const camera_distance_mult = .05;
+  const camera_y_offset = -800;
+
+  distance_y = (- camera._y - player.phaser_object.y) - camera_y_offset;
+  camera._y = camera._y + (distance_y * camera_distance_mult);
 }
