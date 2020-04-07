@@ -28,6 +28,8 @@ let cursors;
 let start = false;
 let started = false;
 
+// Should be abstracted into Camera class
+let camera_y_working;
 
 function preload(){
     this.load.image("tiles", "assets/level1TileSet.png");
@@ -70,8 +72,6 @@ function create(){
     });
 
     player = new Player(phaser_character, [2, 3], 300);
-
-  
 }
 
 function update(){
@@ -96,9 +96,17 @@ function update(){
 }
 
 function update_camera(camera, player) {
-  const camera_distance_mult = .05;
-  const camera_y_offset = -800;
+  if (camera_y_working === undefined) {
+    camera_y_working = camera._y
+  }
 
-  distance_y = (- camera._y - player.phaser_object.y) - camera_y_offset;
-  camera._y = camera._y + (distance_y * camera_distance_mult);
+  if (camera_y_working !== undefined) {
+    const camera_distance_mult = .05;
+    const camera_y_offset = -800;
+
+    distance_y = (- camera_y_working - player.phaser_object.y) - camera_y_offset;
+    camera_y_working = camera_y_working + (distance_y * camera_distance_mult);
+
+    camera._y = Math.round(camera_y_working);
+  }
 }
